@@ -1,0 +1,17 @@
+{
+    "name": "dyweb/bmFu",
+    "description": "A php data wrapper for restful backend service",
+    "homepage": "https://github.com/dyweb/bmFu",
+    "type": "library",
+    "license": "MIT",
+    "require": {
+        "php": ">=5.5.0"
+    },
+    "require-dev": {
+        "at15/codeignitordb": "dev-master",
+        "phpunit/phpunit": "~4.0"
+    },
+    "autoload": {
+        "psr-4": {"Dy\\": "src/Dy"}
+    }
+}

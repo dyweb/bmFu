@@ -1,0 +1,12 @@
+language: php
+
+php:
+  - 5.5
+
+before_script:
+  - phpenv config-add php_config.ini
+  - composer install --no-interaction --prefer-source
+
+script:
+  - php bin/migrate.php db:create
+  - vendor/bin/phpunit
