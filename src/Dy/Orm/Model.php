@@ -27,6 +27,7 @@ abstract class Model
             $class_name = get_called_class();
             throw new \Exception("Model {$class_name} must have table name");
         }
+        // assign the attributes
     }
 
     public static function find($primary_key_value)
