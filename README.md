@@ -1,4 +1,7 @@
 # bmFu
+
+[![Build Status](https://travis-ci.org/dyweb/bmFu.svg)](https://travis-ci.org/dyweb/bmFu)
+
 A php data wrapper for restful backend service
 
 ### Notice
@@ -6,5 +9,6 @@ A php data wrapper for restful backend service
 
 ````
 # generate a migration
-
+cd migrate
+php artisan generate:migration create_posts_table
 ````

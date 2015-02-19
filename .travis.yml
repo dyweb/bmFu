@@ -3,10 +3,19 @@ language: php
 php:
   - 5.5
 
+env:
+  - IS_TRAVIS=1
+  - DB=mysql
+  - DB_HOST=localhost
+  - DB_DATABASE=bmfu_test
+  - DB_USERNAME=root
+  - DB_PASSWORD=
+
 before_script:
+  - if [[ "$DB" == "mysql" ]]; then mysql -e "create database IF NOT EXISTS bmfu_test;" -uroot; fi
   - phpenv config-add php_config.ini
-  - composer install --no-interaction --prefer-source
+  - composer install --no-interaction --prefer-dist
+#  script: sh -c 'cd test && bundle exec rake db:drop db:create db:migrate test'
 
 script:
-  - php bin/migrate.php db:create
   - vendor/bin/phpunit

@@ -1,0 +1,48 @@
+{
+    "_readme": [
+        "This file locks the dependencies of your project to a known state",
+        "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "This file is @generated automatically"
+    ],
+    "hash": "139ed3aa24379702d9fda895343ee5eb",
+    "packages": [],
+    "packages-dev": [
+        {
+            "name": "at15/codeignitordb",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/at15/codeignitordb.git",
+                "reference": "5ff14f77971e0db36229394def0e2485495f8d69"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/at15/codeignitordb/zipball/5ff14f77971e0db36229394def0e2485495f8d69",
+                "reference": "5ff14f77971e0db36229394def0e2485495f8d69",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.5.0"
+            },
+            "type": "library",
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": " a copy of codeignitor's database library",
+            "homepage": "http://github.com/at15/codeignitordb",
+            "time": "2015-02-19 01:41:06"
+        }
+    ],
+    "aliases": [],
+    "minimum-stability": "stable",
+    "stability-flags": {
+        "at15/codeignitordb": 20
+    },
+    "prefer-stable": false,
+    "prefer-lowest": false,
+    "platform": {
+        "php": ">=5.5.0"
+    },
+    "platform-dev": []
+}

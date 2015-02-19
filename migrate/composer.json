@@ -10,8 +10,7 @@
 	"require-dev": {
         "laravel/framework": "5.0.*",
 		"phpunit/phpunit": "~4.0",
-		"phpspec/phpspec": "~2.1",
-        "way/generators": "dev-master"
+		"phpspec/phpspec": "~2.1"
 	},
 	"autoload": {
 		"classmap": [
