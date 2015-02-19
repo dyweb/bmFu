@@ -21,6 +21,9 @@ abstract class Model
     protected static $_ci;
     protected static $_redis;
 
+    protected $_attributes = array();
+    protected $_original = array();
+
     public function __construct($attributes = array())
     {
         if (empty(static::TABLE_NAME)) {
@@ -28,6 +31,14 @@ abstract class Model
             throw new \Exception("Model {$class_name} must have table name");
         }
         // assign the attributes
+        if (!empty($attributes)) {
+            $this->_set_attributes($attributes);
+        }
+    }
+
+    public function __get($name)
+    {
+        return $this->_attributes[$name];
     }
 
     public static function find($primary_key_value)
@@ -43,6 +54,7 @@ abstract class Model
         if (empty($record)) {
             throw new NotFound($primary_key_value);
         }
+
         return new static($record);
     }
 
@@ -52,4 +64,16 @@ abstract class Model
         static::$_ci = &get_instance();
         static::$_redis = static::$_ci->redis_lib->client;
     }
+
+    protected function _set_attributes($attributes)
+    {
+        if (!isset($attributes[static::PRIMARY_KEY_NAME])) {
+            throw new \Exception('must have primary key when _set_attributes!');
+        }
+        // TODO:it's not safe to assign the values directly
+        $this->_attributes = $attributes;
+        $this->_original = $attributes;
+    }
+
+
 }

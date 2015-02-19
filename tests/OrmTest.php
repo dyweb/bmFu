@@ -29,4 +29,10 @@ class OrmTest extends PHPUnit_Framework_TestCase
             $this->assertEquals($e->get_primary_key_value(),233);
         }
     }
+
+    public function testFind(){
+        $t = Topic::find(1);
+        $this->assertInstanceOf('Topic',$t);
+        $this->assertEquals('hangout',$t->name);
+    }
 }
