@@ -7,7 +7,7 @@
  */
 define('ENVIRONMENT', 'development');
 define('PHPUNIT_FOR_CI', 1);
-define('BASEPATH', __DIR__ . '/../../dev/system/');
+define('BASEPATH', __DIR__ . '/../vendor/at15/codeignitordb/ci/system/');
 define('APPPATH', __DIR__ . '/');
 
 function get_config()

@@ -16,4 +16,17 @@ class OrmTest extends PHPUnit_Framework_TestCase
             $this->assertEquals($e->getMessage(), 'Model User must have table name');
         }
     }
+
+    public function testBoot(){
+        // all is well
+        $topic = new Topic();
+    }
+
+    public function testNotFound(){
+        try{
+            $t = Topic::find(233);
+        }catch (\Dy\Orm\Exception\NotFound $e){
+            $this->assertEquals($e->get_primary_key_value(),233);
+        }
+    }
 }
