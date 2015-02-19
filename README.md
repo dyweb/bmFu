@@ -10,5 +10,8 @@ A php data wrapper for restful backend service
 ````
 # generate a migration
 cd migrate
-php artisan generate:migration create_posts_table
+php artisan make:migration create_posts_table
+
+# run migration with seed
+php artisan migrate --seed
 ````
