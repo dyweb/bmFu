@@ -12,7 +12,7 @@ before_script:
   - phpenv config-add php_config.ini
   - composer install --no-interaction --prefer-dist
   - sh -c 'cd migrate && composer install --no-interaction --prefer-dist'
-  - sh -c 'cd migrate && php artisan migrate'
+  - sh -c 'cd migrate && php artisan migrate --force'
 
 script:
   - vendor/bin/phpunit
