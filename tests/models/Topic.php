@@ -10,6 +10,7 @@
 /**
  * Class Topic
  *
+ * @property int id
  * @property string name
  */
 final class Topic extends Dy\Orm\Model

@@ -86,15 +86,17 @@ abstract class Model
     }
 
     /**
+     * @return int primary_key_value for the created or updated record
      * @throws NotModified
+     * @throws NotSaved
      */
     public function save()
     {
         if (!empty($this->_attributes)) {
             if (empty($this->_original)) {
-                $this->create();
+                return $this->create();
             } else {
-                $this->update();
+                return $this->update();
             }
         } else {
             throw new NotModified();
@@ -103,6 +105,7 @@ abstract class Model
 
     public function create()
     {
+        // add the timestamps
         if (!isset($this->_attributes['update_time'])) {
             $current_time = date("Y-m-d H:i:s");
             $this->_attributes['create_time'] = $current_time;
@@ -122,13 +125,37 @@ abstract class Model
             throw new NotSaved();
         }
 
+        // TODO:should we refetch everything from database?
         $this->_attributes[static::PRIMARY_KEY_NAME] = $id;
         $this->_original = $this->_attributes;
+
+        return $id;
     }
 
     public function update()
     {
+        $dirty = $this->_get_dirty();
+        if (empty($dirty)) {
+            throw new NotModified();
+        }
 
+        $this->_attributes['update_time'] = date("Y-m-d H:i:s");
+
+        try {
+            static::$_ci->db->update(static::TABLE_NAME,
+                $dirty,
+                array(static::PRIMARY_KEY_NAME => $this->_attributes[static::PRIMARY_KEY_NAME]));
+        } catch (\Exception $e) {
+            throw new NotSaved($e->getMessage());
+        }
+
+        // check if really saved. in production and dev environment ci's database doesn't throw error.
+        $affected_rows = static::$_ci->db->affected_rows();
+        if ($affected_rows !== 1) {
+            throw new NotSaved();
+        }
+
+        return $this->_attributes[static::PRIMARY_KEY_NAME];
     }
 
     protected static function _boot()
@@ -146,6 +173,27 @@ abstract class Model
         // TODO:it's not safe to assign the values directly
         $this->_attributes = $attributes;
         $this->_original = $attributes;
+    }
+
+    protected function _get_dirty()
+    {
+        $dirty = array();
+        foreach ($this->_attributes as $key => $current_value) {
+            if (!isset($this->_original[$key])) {
+                $dirty[$key] = $current_value;
+                continue;
+            }
+            $origin = $this->_original[$key];
+            if ($origin !== $current_value) {
+                // 处理字符串数字相等但不严格等的问题
+                if (is_numeric($origin) AND is_numeric($current_value) AND $origin == $current_value) {
+                    continue;
+                } else {
+                    $dirty[$key] = $current_value;
+                }
+            }
+        }
+        return $dirty;
     }
 
 

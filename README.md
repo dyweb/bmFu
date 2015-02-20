@@ -8,10 +8,8 @@ A php data wrapper for restful backend service
 - [x] Exception -> NotFound
 - [x] find
 - [x] __get
-- [ ] create
-- [ ] create_or_fail
-- [ ] update
-- [ ] update_or_fail
+- [x] create (will throw Exception)
+- [x] update (will throw Exception)
 - [ ] delete
 - [ ] delete_or_fail
 - [ ] remember_to_mem

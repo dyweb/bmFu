@@ -59,6 +59,14 @@ class OrmTest extends PHPUnit_Framework_TestCase
         } catch (\Exception $e) {
             $this->assertInstanceOf('Dy\Orm\Exception\NotSaved', $e);
         }
+
+        $t2 = Topic::find(1);
+        $t2->jack = '233';
+        try {
+            $t2->save();
+        } catch (\Exception $e) {
+            $this->assertInstanceOf('Dy\Orm\Exception\NotSaved', $e);
+        }
     }
 
     public function testSaveId()
@@ -66,6 +74,24 @@ class OrmTest extends PHPUnit_Framework_TestCase
         $t = new Topic();
         $t->name = 'xiaoming';
         $t->save();
-        $this->assertLessThan($t->id,0);
+        $this->assertLessThan($t->id, 2);
+    }
+
+    public function testSaveNotModifiedFail()
+    {
+        $t = Topic::find(1);
+        try {
+            $t->save();
+        } catch (\Exception $e) {
+            $this->assertInstanceOf('Dy\Orm\Exception\NotModified', $e);
+        }
+    }
+
+    public function testSaveUpdate()
+    {
+        $t = Topic::find(3);
+        $t->name = 'callmemaybe' . time();
+        $t->save();
+        $this->assertEquals(3, $t->id);
     }
 }
