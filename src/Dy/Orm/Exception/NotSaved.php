@@ -11,8 +11,8 @@ namespace Dy\Orm\Exception;
 
 final class NotSaved extends \Exception
 {
-    public function __construct()
+    public function __construct($msg = '')
     {
-        parent::__construct('Record not saved!');
+        parent::__construct("Record not saved! because {$msg}");
     }
 }

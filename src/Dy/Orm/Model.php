@@ -108,11 +108,20 @@ abstract class Model
             $this->_attributes['create_time'] = $current_time;
             $this->_attributes['update_time'] = $current_time;
         }
-        static::$_ci->db->insert(static::TABLE_NAME, $this->_attributes);
+
+        try {
+            static::$_ci->db->insert(static::TABLE_NAME, $this->_attributes);
+        } catch (\Exception $e) {
+            throw new NotSaved($e->getMessage());
+        }
+
         $id = intval(static::$_ci->db->insert_id());
-        if (!$id) {
+
+        // in production, ci's database wont have exception so we check the id.
+        if(!$id){
             throw new NotSaved();
         }
+
         $this->_attributes[static::PRIMARY_KEY_NAME] = $id;
         $this->_original = $this->_attributes;
     }
