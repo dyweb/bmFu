@@ -12,7 +12,10 @@ before_script:
   - phpenv config-add php_config.ini
   - composer install --no-interaction --prefer-dist
   - sh -c 'cd migrate && composer install --no-interaction --prefer-dist'
-  - sh -c 'cd migrate && php artisan migrate --force'
+  - sh -c 'cd migrate && php artisan migrate --force --seed'
 
 script:
   - vendor/bin/phpunit
+
+services:
+  - redis-server
