@@ -18,7 +18,8 @@ class CreateMessagesTable extends Migration {
             $table->string('topic_id');
             $table->string('uid');
             $table->string('content');
-            $table->timestamps();
+            $table->dateTime('create_time');
+            $table->dateTime('update_time');
         });
 	}
 

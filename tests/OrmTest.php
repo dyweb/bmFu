@@ -60,4 +60,12 @@ class OrmTest extends PHPUnit_Framework_TestCase
             $this->assertInstanceOf('Dy\Orm\Exception\NotSaved', $e);
         }
     }
+
+    public function testSaveId()
+    {
+        $t = new Topic();
+        $t->name = 'xiaoming';
+        $t->save();
+        $this->assertLessThan($t->id,0);
+    }
 }

@@ -16,7 +16,8 @@ class CreateTopicsTable extends Migration {
         {
             $table->increments('id');
             $table->string('name');
-            $table->timestamps();
+            $table->dateTime('create_time')->default('0000-00-00 00:00:00');
+            $table->dateTime('update_time')->default('0000-00-00 00:00:00');
         });
 	}
 

@@ -96,9 +96,9 @@ abstract class Model
             } else {
                 $this->update();
             }
+        } else {
+            throw new NotModified();
         }
-
-        throw new NotModified();
     }
 
     public function create()
@@ -118,7 +118,7 @@ abstract class Model
         $id = intval(static::$_ci->db->insert_id());
 
         // in production, ci's database wont have exception so we check the id.
-        if(!$id){
+        if (!$id) {
             throw new NotSaved();
         }
 
