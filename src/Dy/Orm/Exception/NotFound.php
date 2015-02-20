@@ -7,7 +7,7 @@
  */
 namespace Dy\Orm\Exception;
 
-class NotFound extends \Exception
+final class NotFound extends \Exception
 {
     private $_primary_key_value = -1;
 

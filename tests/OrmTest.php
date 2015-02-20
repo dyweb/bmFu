@@ -17,22 +17,35 @@ class OrmTest extends PHPUnit_Framework_TestCase
         }
     }
 
-    public function testBoot(){
+    public function testBoot()
+    {
         // all is well
         $topic = new Topic();
     }
 
-    public function testNotFound(){
-        try{
+    public function testNotFound()
+    {
+        try {
             $t = Topic::find(233);
-        }catch (\Dy\Orm\Exception\NotFound $e){
-            $this->assertEquals($e->get_primary_key_value(),233);
+        } catch (\Dy\Orm\Exception\NotFound $e) {
+            $this->assertEquals($e->get_primary_key_value(), 233);
         }
     }
 
-    public function testFind(){
+    public function testFind()
+    {
         $t = Topic::find(1);
-        $this->assertInstanceOf('Topic',$t);
-        $this->assertEquals('hangout',$t->name);
+        $this->assertInstanceOf('Topic', $t);
+        $this->assertEquals('hangout', $t->name);
+    }
+
+    public function testSaveFail()
+    {
+        $t = new Topic();
+        try {
+            $t->save();
+        } catch (\Exception $e) {
+            $this->assertInstanceOf('Dy\Orm\Exception\NotModified', $e);
+        }
     }
 }

@@ -4,7 +4,21 @@
 
 A php data wrapper for restful backend service
 
-### Notice
+### TODO
+- [x] Exception -> NotFound
+- [x] find
+- [x] __get
+- [ ] create
+- [ ] create_or_fail
+- [ ] update
+- [ ] update_or_fail
+- [ ] delete
+- [ ] delete_or_fail
+- [ ] remember_to_mem
+- [ ] remember_to_cache
+
+### Develop
+
 1. we use a laravel application as migration tool
 
 ````
@@ -12,6 +26,21 @@ A php data wrapper for restful backend service
 cd migrate
 php artisan make:migration create_posts_table
 
+# generate a seed
+# just copy and paste and rename ....
+
 # run migration with seed
 php artisan migrate --seed
+````
+
+2. use phpunit to test
+
+````
+# must dump the classmap for test models
+composer dump-autoload
+
+# use the system phpunit in dev environment
+phpunit
+# or use the one in vendor
+./vendor/bin/phpunit
 ````

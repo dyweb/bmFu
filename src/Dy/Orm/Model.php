@@ -6,6 +6,7 @@
  * Time: 下午10:45
  */
 namespace Dy\Orm;
+
 use Dy\Orm\Exception\NotFound;
 
 /**
@@ -31,16 +32,40 @@ abstract class Model
             throw new \Exception("Model {$class_name} must have table name");
         }
         // assign the attributes
+        // TODO: how to know if attributes are from database not user input?
         if (!empty($attributes)) {
             $this->_set_attributes($attributes);
         }
     }
 
+    /**
+     *
+     * @todo Exception when attribute not exists?
+     *
+     * @param $name
+     * @return mixed
+     */
     public function __get($name)
     {
         return $this->_attributes[$name];
     }
 
+    /**
+     * @param $name
+     * @param $value
+     */
+    public function __set($name, $value)
+    {
+        $this->_attributes[$name] = $value;
+    }
+
+    /**
+     * Find one record by primary_key_value
+     *
+     * @param $primary_key_value
+     * @return static
+     * @throws NotFound
+     */
     public static function find($primary_key_value)
     {
         if (!static::$_booted) {
@@ -56,6 +81,28 @@ abstract class Model
         }
 
         return new static($record);
+    }
+
+    public function save()
+    {
+        if (!empty($this->_attributes)) {
+            if (empty($this->_original)) {
+                $this->create();
+            } else {
+                $this->update();
+            }
+        }
+        // TODO:the exception for this one;
+    }
+
+    public function create()
+    {
+
+    }
+
+    public function update()
+    {
+
     }
 
     protected static function _boot()
