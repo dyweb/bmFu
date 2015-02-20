@@ -39,13 +39,25 @@ class OrmTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('hangout', $t->name);
     }
 
-    public function testSaveFail()
+    public function testSaveEmptyFail()
     {
         $t = new Topic();
         try {
             $t->save();
         } catch (\Exception $e) {
             $this->assertInstanceOf('Dy\Orm\Exception\NotModified', $e);
+        }
+    }
+
+    public function testSaveWrongColumnFail()
+    {
+        $t = new Topic();
+        $t->name = 'xiaoming';
+        $t->not_exists_column = '233';
+        try {
+            $t->save();
+        } catch (\Exception $e) {
+            $this->assertInstanceOf('Dy\Orm\Exception\NotSaved', $e);
         }
     }
 }

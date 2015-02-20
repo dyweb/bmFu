@@ -8,6 +8,8 @@
 namespace Dy\Orm;
 
 use Dy\Orm\Exception\NotFound;
+use Dy\Orm\Exception\NotModified;
+use Dy\Orm\Exception\NotSaved;
 
 /**
  * Class Model
@@ -83,6 +85,9 @@ abstract class Model
         return new static($record);
     }
 
+    /**
+     * @throws NotModified
+     */
     public function save()
     {
         if (!empty($this->_attributes)) {
@@ -92,12 +97,24 @@ abstract class Model
                 $this->update();
             }
         }
-        // TODO:the exception for this one;
+
+        throw new NotModified();
     }
 
     public function create()
     {
-
+        if (!isset($this->_attributes['update_time'])) {
+            $current_time = date("Y-m-d H:i:s");
+            $this->_attributes['create_time'] = $current_time;
+            $this->_attributes['update_time'] = $current_time;
+        }
+        static::$_ci->db->insert(static::TABLE_NAME, $this->_attributes);
+        $id = intval(static::$_ci->db->insert_id());
+        if (!$id) {
+            throw new NotSaved();
+        }
+        $this->_attributes[static::PRIMARY_KEY_NAME] = $id;
+        $this->_original = $this->_attributes;
     }
 
     public function update()
