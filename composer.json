@@ -1,5 +1,5 @@
 {
-    "name": "dyweb/bmFu",
+    "name": "dyweb/bm-fu",
     "description": "A php data wrapper for restful backend service",
     "homepage": "https://github.com/dyweb/bmFu",
     "type": "library",
