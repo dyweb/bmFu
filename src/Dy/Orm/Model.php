@@ -19,6 +19,7 @@ abstract class Model
 {
     const TABLE_NAME = '';
     const PRIMARY_KEY_NAME = 'id';
+    const DEFAULT_PAGE_SIZE = 10;
 
     protected static $_booted = false;
     protected static $_ci;

@@ -14,4 +14,12 @@ class PageTest extends PHPUnit_Framework_TestCase
         $t = new Topic();
         $this->assertEquals(true, $t->can_page());
     }
+
+    public function testSanitize()
+    {
+        $t = new Topic();
+        $a = $t->page(-1, 100);
+        $this->assertEquals(1, $a[0]);
+        $this->assertEquals(100, $a[1]);
+    }
 }
