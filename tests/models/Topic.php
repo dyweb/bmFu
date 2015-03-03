@@ -15,5 +15,6 @@
  */
 final class Topic extends Dy\Orm\Model
 {
+    use Dy\Orm\Page;
     const TABLE_NAME = 'topics';
 }
