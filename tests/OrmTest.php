@@ -113,4 +113,10 @@ class OrmTest extends PHPUnit_Framework_TestCase
         }
     }
 
+    public function testOrder()
+    {
+        Topic::order('-id-name+create_time');
+        Topic::order('id, +name, -create_time');
+    }
+
 }

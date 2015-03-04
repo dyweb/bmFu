@@ -103,6 +103,68 @@ abstract class Model
         return $selectFiltered;
     }
 
+    public static function order($order)
+    {
+        $order = static::_filter_order($order);
+        foreach ($order as $val) {
+            static::$_ci->db->order_by($val[0], $val[1]);
+        }
+    }
+
+    private static function _filter_order($order)
+    {
+        if (is_string($order)) {
+            $src = $order;
+            $order = array();
+            $offset = 0;
+            $len = strlen($src);
+            while ($offset < $len) {
+                $offset += 1;
+                $pos = static::_strpos_or($src, array('+', '-', ',', ' '), $offset);
+                $name = trim(substr($src, $offset, $pos - $offset));
+                if ($name !== '') {
+                    $direction = substr($src, $offset - 1, 1);
+                    if ($direction === '+') {
+                        $direction = 'ASC';
+                    } elseif ($direction === '-') {
+                        $direction = 'DESC';
+                    } else {
+                        if ($offset === 1) {
+                            $name = ltrim($direction . $name);
+                        }
+                        $direction = 'ASC';
+                    }
+                    static::_check_field($name);
+                    $order[] = array($name, $direction);
+                }
+                $offset = $pos;
+            }
+        } else {
+            foreach ($order as $val) {
+                static::_check_field($val[0]);
+            }
+        }
+        return $order;
+    }
+
+    /**
+     * @param string $haystack
+     * @param array $needles
+     * @param int $offset
+     * @return int the position as an integer or length of haystack if needle not found.
+     */
+    private static function _strpos_or($haystack, $needles, $offset = 0)
+    {
+        $posMin = strlen($haystack);
+        foreach ($needles as $needle) {
+            $pos = strpos($haystack, $needle, $offset);
+            if ($pos !== FALSE AND $pos < $posMin) {
+                $posMin = $pos;
+            }
+        }
+        return $posMin;
+    }
+
     /**
      * Find one record by primary_key_value
      *
