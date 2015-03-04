@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "6212a7cd81a0615ea4b1fe95e05e4e3b",
+    "hash": "664a49ab1ee1c6691b4d6852ec958d2d",
     "packages": [],
     "packages-dev": [
         {
@@ -13,12 +13,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/at15/codeignitordb.git",
-                "reference": "5ff14f77971e0db36229394def0e2485495f8d69"
+                "reference": "0f132fe02ab868629439c49514ca5d0c60229225"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/at15/codeignitordb/zipball/5ff14f77971e0db36229394def0e2485495f8d69",
-                "reference": "5ff14f77971e0db36229394def0e2485495f8d69",
+                "url": "https://api.github.com/repos/at15/codeignitordb/zipball/0f132fe02ab868629439c49514ca5d0c60229225",
+                "reference": "0f132fe02ab868629439c49514ca5d0c60229225",
                 "shasum": ""
             },
             "require": {
@@ -31,7 +31,7 @@
             ],
             "description": " a copy of codeignitor's database library",
             "homepage": "http://github.com/at15/codeignitordb",
-            "time": "2015-02-19 01:41:06"
+            "time": "2015-03-04 14:54:44"
         },
         {
             "name": "doctrine/instantiator",
@@ -39,13 +39,25 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/instantiator.git",
-                "reference": "f976e5de371104877ebc89bd8fecb0019ed9c119"
+                "reference": "f976e5de371104877ebc89bd8fecb0019ed9c119",
+                "mirrors": [
+                    {
+                        "url": "/%package%/%normalizedUrl%.%type%",
+                        "preferred": true
+                    }
+                ]
             },
             "dist": {
                 "type": "zip",
                 "url": "https://api.github.com/repos/doctrine/instantiator/zipball/f976e5de371104877ebc89bd8fecb0019ed9c119",
                 "reference": "f976e5de371104877ebc89bd8fecb0019ed9c119",
-                "shasum": ""
+                "shasum": "",
+                "mirrors": [
+                    {
+                        "url": "http://pkg.phpcomposer.com/repo/packagist/dists/%package%/%version%/%reference%.%type%",
+                        "preferred": true
+                    }
+                ]
             },
             "require": {
                 "php": ">=5.3,<8.0-DEV"
@@ -93,13 +105,25 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpDocumentor/ReflectionDocBlock.git",
-                "reference": "d68dbdc53dc358a816f00b300704702b2eaff7b8"
+                "reference": "d68dbdc53dc358a816f00b300704702b2eaff7b8",
+                "mirrors": [
+                    {
+                        "url": "/%package%/%normalizedUrl%.%type%",
+                        "preferred": true
+                    }
+                ]
             },
             "dist": {
                 "type": "zip",
                 "url": "https://api.github.com/repos/phpDocumentor/ReflectionDocBlock/zipball/d68dbdc53dc358a816f00b300704702b2eaff7b8",
                 "reference": "d68dbdc53dc358a816f00b300704702b2eaff7b8",
-                "shasum": ""
+                "shasum": "",
+                "mirrors": [
+                    {
+                        "url": "http://pkg.phpcomposer.com/repo/packagist/dists/%package%/%version%/%reference%.%type%",
+                        "preferred": true
+                    }
+                ]
             },
             "require": {
                 "php": ">=5.3.3"
@@ -142,13 +166,25 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpspec/prophecy.git",
-                "reference": "9ca52329bcdd1500de24427542577ebf3fc2f1c9"
+                "reference": "9ca52329bcdd1500de24427542577ebf3fc2f1c9",
+                "mirrors": [
+                    {
+                        "url": "/%package%/%normalizedUrl%.%type%",
+                        "preferred": true
+                    }
+                ]
             },
             "dist": {
                 "type": "zip",
                 "url": "https://api.github.com/repos/phpspec/prophecy/zipball/9ca52329bcdd1500de24427542577ebf3fc2f1c9",
                 "reference": "9ca52329bcdd1500de24427542577ebf3fc2f1c9",
-                "shasum": ""
+                "shasum": "",
+                "mirrors": [
+                    {
+                        "url": "http://pkg.phpcomposer.com/repo/packagist/dists/%package%/%version%/%reference%.%type%",
+                        "preferred": true
+                    }
+                ]
             },
             "require": {
                 "doctrine/instantiator": "~1.0,>=1.0.2",
@@ -201,13 +237,25 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/php-code-coverage.git",
-                "reference": "34cc484af1ca149188d0d9e91412191e398e0b67"
+                "reference": "34cc484af1ca149188d0d9e91412191e398e0b67",
+                "mirrors": [
+                    {
+                        "url": "/%package%/%normalizedUrl%.%type%",
+                        "preferred": true
+                    }
+                ]
             },
             "dist": {
                 "type": "zip",
                 "url": "https://api.github.com/repos/sebastianbergmann/php-code-coverage/zipball/34cc484af1ca149188d0d9e91412191e398e0b67",
                 "reference": "34cc484af1ca149188d0d9e91412191e398e0b67",
-                "shasum": ""
+                "shasum": "",
+                "mirrors": [
+                    {
+                        "url": "http://pkg.phpcomposer.com/repo/packagist/dists/%package%/%version%/%reference%.%type%",
+                        "preferred": true
+                    }
+                ]
             },
             "require": {
                 "php": ">=5.3.3",
@@ -263,13 +311,25 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/php-file-iterator.git",
-                "reference": "acd690379117b042d1c8af1fafd61bde001bf6bb"
+                "reference": "acd690379117b042d1c8af1fafd61bde001bf6bb",
+                "mirrors": [
+                    {
+                        "url": "/%package%/%normalizedUrl%.%type%",
+                        "preferred": true
+                    }
+                ]
             },
             "dist": {
                 "type": "zip",
                 "url": "https://api.github.com/repos/sebastianbergmann/php-file-iterator/zipball/acd690379117b042d1c8af1fafd61bde001bf6bb",
                 "reference": "acd690379117b042d1c8af1fafd61bde001bf6bb",
-                "shasum": ""
+                "shasum": "",
+                "mirrors": [
+                    {
+                        "url": "http://pkg.phpcomposer.com/repo/packagist/dists/%package%/%version%/%reference%.%type%",
+                        "preferred": true
+                    }
+                ]
             },
             "require": {
                 "php": ">=5.3.3"
@@ -308,13 +368,25 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/php-text-template.git",
-                "reference": "206dfefc0ffe9cebf65c413e3d0e809c82fbf00a"
+                "reference": "206dfefc0ffe9cebf65c413e3d0e809c82fbf00a",
+                "mirrors": [
+                    {
+                        "url": "/%package%/%normalizedUrl%.%type%",
+                        "preferred": true
+                    }
+                ]
             },
             "dist": {
                 "type": "zip",
                 "url": "https://api.github.com/repos/sebastianbergmann/php-text-template/zipball/206dfefc0ffe9cebf65c413e3d0e809c82fbf00a",
                 "reference": "206dfefc0ffe9cebf65c413e3d0e809c82fbf00a",
-                "shasum": ""
+                "shasum": "",
+                "mirrors": [
+                    {
+                        "url": "http://pkg.phpcomposer.com/repo/packagist/dists/%package%/%version%/%reference%.%type%",
+                        "preferred": true
+                    }
+                ]
             },
             "require": {
                 "php": ">=5.3.3"
@@ -352,13 +424,25 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/php-timer.git",
-                "reference": "19689d4354b295ee3d8c54b4f42c3efb69cbc17c"
+                "reference": "19689d4354b295ee3d8c54b4f42c3efb69cbc17c",
+                "mirrors": [
+                    {
+                        "url": "/%package%/%normalizedUrl%.%type%",
+                        "preferred": true
+                    }
+                ]
             },
             "dist": {
                 "type": "zip",
                 "url": "https://api.github.com/repos/sebastianbergmann/php-timer/zipball/19689d4354b295ee3d8c54b4f42c3efb69cbc17c",
                 "reference": "19689d4354b295ee3d8c54b4f42c3efb69cbc17c",
-                "shasum": ""
+                "shasum": "",
+                "mirrors": [
+                    {
+                        "url": "http://pkg.phpcomposer.com/repo/packagist/dists/%package%/%version%/%reference%.%type%",
+                        "preferred": true
+                    }
+                ]
             },
             "require": {
                 "php": ">=5.3.3"
@@ -396,13 +480,25 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/php-token-stream.git",
-                "reference": "db32c18eba00b121c145575fcbcd4d4d24e6db74"
+                "reference": "db32c18eba00b121c145575fcbcd4d4d24e6db74",
+                "mirrors": [
+                    {
+                        "url": "/%package%/%normalizedUrl%.%type%",
+                        "preferred": true
+                    }
+                ]
             },
             "dist": {
                 "type": "zip",
                 "url": "https://api.github.com/repos/sebastianbergmann/php-token-stream/zipball/db32c18eba00b121c145575fcbcd4d4d24e6db74",
                 "reference": "db32c18eba00b121c145575fcbcd4d4d24e6db74",
-                "shasum": ""
+                "shasum": "",
+                "mirrors": [
+                    {
+                        "url": "http://pkg.phpcomposer.com/repo/packagist/dists/%package%/%version%/%reference%.%type%",
+                        "preferred": true
+                    }
+                ]
             },
             "require": {
                 "ext-tokenizer": "*",
@@ -445,13 +541,25 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "5b578d3865a9128b9c209b011fda6539ec06e7a5"
+                "reference": "5b578d3865a9128b9c209b011fda6539ec06e7a5",
+                "mirrors": [
+                    {
+                        "url": "/%package%/%normalizedUrl%.%type%",
+                        "preferred": true
+                    }
+                ]
             },
             "dist": {
                 "type": "zip",
                 "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/5b578d3865a9128b9c209b011fda6539ec06e7a5",
                 "reference": "5b578d3865a9128b9c209b011fda6539ec06e7a5",
-                "shasum": ""
+                "shasum": "",
+                "mirrors": [
+                    {
+                        "url": "http://pkg.phpcomposer.com/repo/packagist/dists/%package%/%version%/%reference%.%type%",
+                        "preferred": true
+                    }
+                ]
             },
             "require": {
                 "ext-dom": "*",
@@ -517,13 +625,25 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit-mock-objects.git",
-                "reference": "c63d2367247365f688544f0d500af90a11a44c65"
+                "reference": "c63d2367247365f688544f0d500af90a11a44c65",
+                "mirrors": [
+                    {
+                        "url": "/%package%/%normalizedUrl%.%type%",
+                        "preferred": true
+                    }
+                ]
             },
             "dist": {
                 "type": "zip",
                 "url": "https://api.github.com/repos/sebastianbergmann/phpunit-mock-objects/zipball/c63d2367247365f688544f0d500af90a11a44c65",
                 "reference": "c63d2367247365f688544f0d500af90a11a44c65",
-                "shasum": ""
+                "shasum": "",
+                "mirrors": [
+                    {
+                        "url": "http://pkg.phpcomposer.com/repo/packagist/dists/%package%/%version%/%reference%.%type%",
+                        "preferred": true
+                    }
+                ]
             },
             "require": {
                 "doctrine/instantiator": "~1.0,>=1.0.1",
@@ -572,13 +692,25 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/comparator.git",
-                "reference": "1dd8869519a225f7f2b9eb663e225298fade819e"
+                "reference": "1dd8869519a225f7f2b9eb663e225298fade819e",
+                "mirrors": [
+                    {
+                        "url": "/%package%/%normalizedUrl%.%type%",
+                        "preferred": true
+                    }
+                ]
             },
             "dist": {
                 "type": "zip",
                 "url": "https://api.github.com/repos/sebastianbergmann/comparator/zipball/1dd8869519a225f7f2b9eb663e225298fade819e",
                 "reference": "1dd8869519a225f7f2b9eb663e225298fade819e",
-                "shasum": ""
+                "shasum": "",
+                "mirrors": [
+                    {
+                        "url": "http://pkg.phpcomposer.com/repo/packagist/dists/%package%/%version%/%reference%.%type%",
+                        "preferred": true
+                    }
+                ]
             },
             "require": {
                 "php": ">=5.3.3",
@@ -636,13 +768,25 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/diff.git",
-                "reference": "5843509fed39dee4b356a306401e9dd1a931fec7"
+                "reference": "5843509fed39dee4b356a306401e9dd1a931fec7",
+                "mirrors": [
+                    {
+                        "url": "/%package%/%normalizedUrl%.%type%",
+                        "preferred": true
+                    }
+                ]
             },
             "dist": {
                 "type": "zip",
                 "url": "https://api.github.com/repos/sebastianbergmann/diff/zipball/5843509fed39dee4b356a306401e9dd1a931fec7",
                 "reference": "5843509fed39dee4b356a306401e9dd1a931fec7",
-                "shasum": ""
+                "shasum": "",
+                "mirrors": [
+                    {
+                        "url": "http://pkg.phpcomposer.com/repo/packagist/dists/%package%/%version%/%reference%.%type%",
+                        "preferred": true
+                    }
+                ]
             },
             "require": {
                 "php": ">=5.3.3"
@@ -688,13 +832,25 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/environment.git",
-                "reference": "6e6c71d918088c251b181ba8b3088af4ac336dd7"
+                "reference": "6e6c71d918088c251b181ba8b3088af4ac336dd7",
+                "mirrors": [
+                    {
+                        "url": "/%package%/%normalizedUrl%.%type%",
+                        "preferred": true
+                    }
+                ]
             },
             "dist": {
                 "type": "zip",
                 "url": "https://api.github.com/repos/sebastianbergmann/environment/zipball/6e6c71d918088c251b181ba8b3088af4ac336dd7",
                 "reference": "6e6c71d918088c251b181ba8b3088af4ac336dd7",
-                "shasum": ""
+                "shasum": "",
+                "mirrors": [
+                    {
+                        "url": "http://pkg.phpcomposer.com/repo/packagist/dists/%package%/%version%/%reference%.%type%",
+                        "preferred": true
+                    }
+                ]
             },
             "require": {
                 "php": ">=5.3.3"
@@ -738,13 +894,25 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/exporter.git",
-                "reference": "84839970d05254c73cde183a721c7af13aede943"
+                "reference": "84839970d05254c73cde183a721c7af13aede943",
+                "mirrors": [
+                    {
+                        "url": "/%package%/%normalizedUrl%.%type%",
+                        "preferred": true
+                    }
+                ]
             },
             "dist": {
                 "type": "zip",
                 "url": "https://api.github.com/repos/sebastianbergmann/exporter/zipball/84839970d05254c73cde183a721c7af13aede943",
                 "reference": "84839970d05254c73cde183a721c7af13aede943",
-                "shasum": ""
+                "shasum": "",
+                "mirrors": [
+                    {
+                        "url": "http://pkg.phpcomposer.com/repo/packagist/dists/%package%/%version%/%reference%.%type%",
+                        "preferred": true
+                    }
+                ]
             },
             "require": {
                 "php": ">=5.3.3",
@@ -804,13 +972,25 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/global-state.git",
-                "reference": "c7428acdb62ece0a45e6306f1ae85e1c05b09c01"
+                "reference": "c7428acdb62ece0a45e6306f1ae85e1c05b09c01",
+                "mirrors": [
+                    {
+                        "url": "/%package%/%normalizedUrl%.%type%",
+                        "preferred": true
+                    }
+                ]
             },
             "dist": {
                 "type": "zip",
                 "url": "https://api.github.com/repos/sebastianbergmann/global-state/zipball/c7428acdb62ece0a45e6306f1ae85e1c05b09c01",
                 "reference": "c7428acdb62ece0a45e6306f1ae85e1c05b09c01",
-                "shasum": ""
+                "shasum": "",
+                "mirrors": [
+                    {
+                        "url": "http://pkg.phpcomposer.com/repo/packagist/dists/%package%/%version%/%reference%.%type%",
+                        "preferred": true
+                    }
+                ]
             },
             "require": {
                 "php": ">=5.3.3"
@@ -855,13 +1035,25 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/recursion-context.git",
-                "reference": "3989662bbb30a29d20d9faa04a846af79b276252"
+                "reference": "3989662bbb30a29d20d9faa04a846af79b276252",
+                "mirrors": [
+                    {
+                        "url": "/%package%/%normalizedUrl%.%type%",
+                        "preferred": true
+                    }
+                ]
             },
             "dist": {
                 "type": "zip",
                 "url": "https://api.github.com/repos/sebastianbergmann/recursion-context/zipball/3989662bbb30a29d20d9faa04a846af79b276252",
                 "reference": "3989662bbb30a29d20d9faa04a846af79b276252",
-                "shasum": ""
+                "shasum": "",
+                "mirrors": [
+                    {
+                        "url": "http://pkg.phpcomposer.com/repo/packagist/dists/%package%/%version%/%reference%.%type%",
+                        "preferred": true
+                    }
+                ]
             },
             "require": {
                 "php": ">=5.3.3"
@@ -908,13 +1100,25 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/version.git",
-                "reference": "a77d9123f8e809db3fbdea15038c27a95da4058b"
+                "reference": "a77d9123f8e809db3fbdea15038c27a95da4058b",
+                "mirrors": [
+                    {
+                        "url": "/%package%/%normalizedUrl%.%type%",
+                        "preferred": true
+                    }
+                ]
             },
             "dist": {
                 "type": "zip",
                 "url": "https://api.github.com/repos/sebastianbergmann/version/zipball/a77d9123f8e809db3fbdea15038c27a95da4058b",
                 "reference": "a77d9123f8e809db3fbdea15038c27a95da4058b",
-                "shasum": ""
+                "shasum": "",
+                "mirrors": [
+                    {
+                        "url": "http://pkg.phpcomposer.com/repo/packagist/dists/%package%/%version%/%reference%.%type%",
+                        "preferred": true
+                    }
+                ]
             },
             "type": "library",
             "autoload": {
@@ -944,13 +1148,25 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Yaml.git",
-                "reference": "60ed7751671113cf1ee7d7778e691642c2e9acd8"
+                "reference": "60ed7751671113cf1ee7d7778e691642c2e9acd8",
+                "mirrors": [
+                    {
+                        "url": "/%package%/%normalizedUrl%.%type%",
+                        "preferred": true
+                    }
+                ]
             },
             "dist": {
                 "type": "zip",
                 "url": "https://api.github.com/repos/symfony/Yaml/zipball/60ed7751671113cf1ee7d7778e691642c2e9acd8",
                 "reference": "60ed7751671113cf1ee7d7778e691642c2e9acd8",
-                "shasum": ""
+                "shasum": "",
+                "mirrors": [
+                    {
+                        "url": "http://pkg.phpcomposer.com/repo/packagist/dists/%package%/%version%/%reference%.%type%",
+                        "preferred": true
+                    }
+                ]
             },
             "require": {
                 "php": ">=5.3.3"
