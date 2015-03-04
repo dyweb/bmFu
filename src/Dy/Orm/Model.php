@@ -46,6 +46,15 @@ abstract class Model
         }
     }
 
+    private static function _check_field($name)
+    {
+        if (in_array($name, static::$_white_list)) {
+            return TRUE;
+        } else {
+            throw new UnknownColumn($name);
+        }
+    }
+
     /**
      *
      * @todo Exception when attribute not exists?
@@ -56,11 +65,8 @@ abstract class Model
      */
     public function __get($name)
     {
-        if (!in_array($name, static::$_white_list)) {
-            throw new UnknownColumn($name);
-        } else {
-            return $this->_attributes[$name];
-        }
+        static::_check_field($name);
+        return $this->_attributes[$name];
     }
 
     /**
@@ -91,9 +97,7 @@ abstract class Model
             if ($val === '') {
                 continue;
             }
-            if (!in_array($val, static::$_white_list)) {
-                throw new UnknownColumn($val);
-            }
+            static::_check_field($val);
             $selectFiltered[] = $val;
         }
         return $selectFiltered;

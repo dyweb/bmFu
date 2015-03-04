@@ -103,4 +103,14 @@ class OrmTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('2015-03-04 12:10:03', $t->create_time);
     }
 
+    public function testWhiteList()
+    {
+        $t = Topic::find(5);
+        try {
+            $t->update_time;
+        } catch (\Exception $e) {
+            $this->assertInstanceOf('Dy\Orm\Exception\UnknownColumn', $e);
+        }
+    }
+
 }
