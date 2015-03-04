@@ -22,6 +22,9 @@ abstract class Model
     const DEFAULT_PAGE_SIZE = 10;
 
     protected static $_booted = false;
+    /**
+     * @var \FakeCI
+     */
     protected static $_ci;
     protected static $_redis;
 
