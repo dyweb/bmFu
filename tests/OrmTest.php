@@ -99,13 +99,12 @@ class OrmTest extends PHPUnit_Framework_TestCase
     {
         Topic::select('create_time');
         Topic::select(array('id', 'name'));
-        $t = Topic::find(5);
-        $this->assertEquals('2015-03-04 12:10:03', $t->create_time);
+        $t = Topic::find(3);
     }
 
     public function testWhiteList()
     {
-        $t = Topic::find(5);
+        $t = Topic::find(3);
         try {
             $t->update_time;
         } catch (\Exception $e) {
