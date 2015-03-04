@@ -71,10 +71,11 @@ class OrmTest extends PHPUnit_Framework_TestCase
 
     public function testSaveId()
     {
+        $count = Topic::countAll();
         $t = new Topic();
         $t->name = 'xiaoming';
         $t->save();
-        $this->assertLessThan($t->id, 2);
+        $this->assertEquals($count + 1, $t->id);
     }
 
     public function testSaveNotModifiedFail()

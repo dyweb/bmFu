@@ -225,6 +225,11 @@ abstract class Model
         static::$_ci->db->limit($perPage, ($page - 1) * $perPage);
     }
 
+    public static function countAll()
+    {
+        return static::$_ci->db->select('count(*) as num')->get(static::TABLE_NAME)->row()->num;
+    }
+
     /**
      * @todo Design the return value.
      * @return object
