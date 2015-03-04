@@ -65,6 +65,11 @@ abstract class Model
         $this->_attributes[$name] = $value;
     }
 
+    public static function select($selection)
+    {
+        static::$_ci->db->select($selection);
+    }
+
     /**
      * Find one record by primary_key_value
      *

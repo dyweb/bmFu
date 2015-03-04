@@ -94,4 +94,13 @@ class OrmTest extends PHPUnit_Framework_TestCase
         $t->save();
         $this->assertEquals(3, $t->id);
     }
+
+    public function testSelect()
+    {
+        Topic::select('create_time');
+        Topic::select(array('id', 'name'));
+        $t = Topic::find(5);
+        $this->assertEquals('2015-03-04 12:10:03', $t->create_time);
+    }
+
 }

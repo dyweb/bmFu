@@ -12,6 +12,8 @@
  *
  * @property int id
  * @property string name
+ * @property string create_time
+ * @property string update_time
  */
 final class Topic extends Dy\Orm\Model
 {
