@@ -124,11 +124,23 @@ class OrmTest extends PHPUnit_Framework_TestCase
         Topic::where(array(
             'select' => 'id,name',
             'order'  => '-id+name',
-            'id'     => '<3'
+            'id'     => '<=3'
         ));
         $result = Topic::get()->result();
-        $this->assertEquals(2, count($result));
-        $this->assertEquals(2, $result[0]->id);
+        $this->assertEquals(3, count($result));
+        $this->assertEquals(1, $result[2]->id);
+    }
+
+    public function testPage()
+    {
+        Topic::where(array(
+            'order' => '-id',
+            'page'  => '3',
+            'id'    => '<=3'
+        ), array('per_page' => 1));
+        $result = Topic::get()->result();
+        $this->assertEquals(1, count($result));
+        $this->assertEquals(1, $result[0]->id);
     }
 
 }

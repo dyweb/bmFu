@@ -165,16 +165,41 @@ abstract class Model
         return $posMin;
     }
 
+    /**
+     * `where([], [])` will take $whereAs as default, e.g. `where($_GET, ['per_page' => 30])`.
+     * `where(string $key, string $value)` is same as `where([$key => $value])`.
+     * `where([])` is the most common style.
+     *
+     * Support keyword 'select', 'order', 'page' and 'per_page'.
+     * NOTE: No pagination will be produced if `page === 'nopage'`.
+     *
+     * @param array|string $where
+     * @param array|mixed $whereAs
+     */
     public static function where($where, $whereAs = NULL)
     {
         if (!is_null($whereAs)) {
-            $where = array($where, $whereAs);
+            if (!is_array($where)) {
+                $where = array($where, $whereAs);
+            } else {
+                $where = array_merge($whereAs, $where);
+            }
         }
+        $page = 1;
+        $perPage = 10;
         foreach ($where as $key => $value) {
             if ($key === 'select') {
                 static::select($value);
             } elseif ($key === 'order') {
                 static::order($value);
+            } elseif ($key === 'page') {
+                if ($value === 'nopage') {
+                    $page = 0;
+                } else {
+                    $page = max(1, intval($value));
+                }
+            } elseif ($key === 'per_page') {
+                $perPage = max(1, intval($value));
             } else {
                 static::_check_field($key);
                 switch (substr($value, 0, 2)) {
@@ -190,6 +215,14 @@ abstract class Model
                 static::$_ci->db->where($key, $value);
             }
         }
+        if ($page >= 1) {
+            static::paging($page, $perPage);
+        }
+    }
+
+    public static function paging($page = 1, $perPage = 10)
+    {
+        static::$_ci->db->limit($perPage, ($page - 1) * $perPage);
     }
 
     public static function get()
