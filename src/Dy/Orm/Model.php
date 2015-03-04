@@ -196,6 +196,4 @@ abstract class Model
         }
         return $dirty;
     }
-
-
 }
