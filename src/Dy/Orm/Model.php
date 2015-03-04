@@ -10,6 +10,7 @@ namespace Dy\Orm;
 use Dy\Orm\Exception\NotFound;
 use Dy\Orm\Exception\NotModified;
 use Dy\Orm\Exception\NotSaved;
+use Dy\Orm\Exception\UnknownColumn;
 
 /**
  * Class Model
@@ -27,6 +28,7 @@ abstract class Model
      */
     protected static $_ci;
     protected static $_redis;
+    protected static $_white_list = array();
 
     protected $_attributes = array();
     protected $_original = array();
@@ -49,11 +51,16 @@ abstract class Model
      * @todo Exception when attribute not exists?
      *
      * @param $name
+     * @throws UnknownColumn
      * @return mixed
      */
     public function __get($name)
     {
-        return $this->_attributes[$name];
+        if (!in_array($name, static::$_white_list)) {
+            throw new UnknownColumn($name);
+        } else {
+            return $this->_attributes[$name];
+        }
     }
 
     /**
@@ -65,9 +72,31 @@ abstract class Model
         $this->_attributes[$name] = $value;
     }
 
-    public static function select($selection)
+    public static function select($select)
     {
-        static::$_ci->db->select($selection);
+        $select = static::_filter_select($select);
+        if (count($select)) {
+            static::$_ci->db->select($select);
+        }
+    }
+
+    private static function _filter_select($select)
+    {
+        if (is_string($select)) {
+            $select = explode(',', $select);
+        }
+        $selectFiltered = array();
+        foreach ($select as $val) {
+            $val = trim($val);
+            if ($val === '') {
+                continue;
+            }
+            if (!in_array($val, static::$_white_list)) {
+                throw new UnknownColumn($val);
+            }
+            $selectFiltered[] = $val;
+        }
+        return $selectFiltered;
     }
 
     /**

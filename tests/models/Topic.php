@@ -19,4 +19,6 @@ final class Topic extends Dy\Orm\Model
 {
     use Dy\Orm\Page;
     const TABLE_NAME = 'topics';
+
+    protected static $_white_list = array('id', 'name', 'create_time');
 }
