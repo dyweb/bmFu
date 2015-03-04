@@ -165,6 +165,38 @@ abstract class Model
         return $posMin;
     }
 
+    public static function where($where, $whereAs = NULL)
+    {
+        if (!is_null($whereAs)) {
+            $where = array($where, $whereAs);
+        }
+        foreach ($where as $key => $value) {
+            if ($key === 'select') {
+                static::select($value);
+            } elseif ($key === 'order') {
+                static::order($value);
+            } else {
+                static::_check_field($key);
+                switch (substr($value, 0, 2)) {
+                    case '>=':          $key .= '>=';   $value = substr($value, 2); break;
+                    case '<=':          $key .= '<=';   $value = substr($value, 2); break;
+                    default:
+                        switch (substr($value, 0, 1)) {
+                            case '!':   $key .= '!=';   $value = substr($value, 1); break;
+                            case '>':   $key .= '>';    $value = substr($value, 1); break;
+                            case '<':   $key .= '<';    $value = substr($value, 1);
+                        }
+                }
+                static::$_ci->db->where($key, $value);
+            }
+        }
+    }
+
+    public static function get()
+    {
+        return static::$_ci->db->get(static::TABLE_NAME);
+    }
+
     /**
      * Find one record by primary_key_value
      *

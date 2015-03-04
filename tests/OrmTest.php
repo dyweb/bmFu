@@ -116,6 +116,19 @@ class OrmTest extends PHPUnit_Framework_TestCase
     {
         Topic::order('-id-name+create_time');
         Topic::order('id, +name, -create_time');
+        Topic::get();
+    }
+
+    public function testWhere()
+    {
+        Topic::where(array(
+            'select' => 'id,name',
+            'order'  => '-id+name',
+            'id'     => '<3'
+        ));
+        $result = Topic::get()->result();
+        $this->assertEquals(2, count($result));
+        $this->assertEquals(2, $result[0]->id);
     }
 
 }
