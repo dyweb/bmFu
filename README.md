@@ -17,9 +17,10 @@ A php data wrapper for restful backend service
 
 ### Develop
 
-1. we use a laravel application as migration tool
+#### 1. we use a laravel application as migration tool
 
 ````
+# This is just an example!
 # generate a migration
 cd migrate
 php artisan make:migration create_posts_table
@@ -31,7 +32,7 @@ php artisan make:migration create_posts_table
 php artisan migrate --seed
 ````
 
-2. use phpunit to test
+#### 2. use phpunit to test
 
 ````
 # must dump the classmap for test models
@@ -43,7 +44,7 @@ phpunit
 ./vendor/bin/phpunit
 ````
 
-3. Folder structure
+#### 3. Folder structure
 
 All lib files are in src folder. migrate folder is a laravel application used
 for test. ( because we need migration and seed in tests and we can't use laravel
