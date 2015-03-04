@@ -171,33 +171,31 @@ abstract class Model
      * `where([])` is the most common style.
      *
      * Support keyword 'select', 'order', 'page' and 'per_page'.
-     * NOTE: No pagination will be produced if `page === 'nopage'`.
+     * NOTE: MUST have a paging, default is `['page' => 1, 'per_page' => 10]`.
      *
-     * @param array|string $where
+     * @param array|string $whereRaw
      * @param array|mixed $whereAs
+     * @return array ['where' => $where, 'page' => $page, 'per_page' => $perPage]
      */
-    public static function where($where, $whereAs = NULL)
+    public static function where($whereRaw, $whereAs = NULL)
     {
         if (!is_null($whereAs)) {
-            if (!is_array($where)) {
-                $where = array($where, $whereAs);
+            if (!is_array($whereRaw)) {
+                $whereRaw = array($whereRaw, $whereAs);
             } else {
-                $where = array_merge($whereAs, $where);
+                $whereRaw = array_merge($whereAs, $whereRaw);
             }
         }
         $page = 1;
         $perPage = 10;
-        foreach ($where as $key => $value) {
+        $where = array();
+        foreach ($whereRaw as $key => $value) {
             if ($key === 'select') {
                 static::select($value);
             } elseif ($key === 'order') {
                 static::order($value);
             } elseif ($key === 'page') {
-                if ($value === 'nopage') {
-                    $page = 0;
-                } else {
-                    $page = max(1, intval($value));
-                }
+                $page = max(1, intval($value));
             } elseif ($key === 'per_page') {
                 $perPage = max(1, intval($value));
             } else {
@@ -212,12 +210,18 @@ abstract class Model
                             case '<':   $key .= '<';    $value = substr($value, 1);
                         }
                 }
-                static::$_ci->db->where($key, $value);
+                $where[$key] = $value;
             }
         }
         if ($page >= 1) {
             static::paging($page, $perPage);
         }
+        static::$_ci->db->where($where);
+        return array(
+            'where'     => $where,
+            'page'      => $page,
+            'per_page'  => $perPage
+        );
     }
 
     public static function paging($page = 1, $perPage = 10)
@@ -237,6 +241,32 @@ abstract class Model
     public static function get()
     {
         return static::$_ci->db->get(static::TABLE_NAME);
+    }
+
+    /**
+     * @see \Dy\Orm\Model::where
+     * @param $whereRaw
+     * @param $whereAs
+     * @return array [
+     *     'count' => $count,
+     *     'result' => [$item0, $item1, ...],
+     *     'option' => ['page' => $page, 'per_page' => $perPage]
+     * ]
+     */
+    public static function getWhere($whereRaw, $whereAs)
+    {
+        $condition = static::where($whereRaw, $whereAs);
+        $result = static::get()->result();
+        static::$_ci->db->where($condition['where']);
+        $count = static::countAll();
+        return array(
+            'count'  => $count,
+            'result' => $result,
+            'option' => array(
+                'page'     => $condition['page'],
+                'per_page' => $condition['per_page']
+            )
+        );
     }
 
     /**

@@ -144,4 +144,15 @@ class OrmTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(1, $result[0]->id);
     }
 
+    public function testGetWhere()
+    {
+        $data = Topic::getWhere(array(
+            'order' => '-id',
+            'page'  => '3',
+            'id'    => '<=3'
+        ), array('per_page' => 1));
+        $this->assertEquals(3, $data['count']);
+        $this->assertEquals(1, $data['result'][0]->id);
+    }
+
 }
