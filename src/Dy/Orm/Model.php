@@ -32,7 +32,7 @@ abstract class Model
     {
         if (empty(static::TABLE_NAME)) {
             $class_name = get_called_class();
-            throw new \Exception("Model {$class_name} must have table name");
+            throw new \Exception('Model ' . $class_name . ' must have table name');
         }
         // assign the attributes
         // TODO: how to know if attributes are from database not user input?
