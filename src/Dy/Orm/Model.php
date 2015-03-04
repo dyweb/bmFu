@@ -225,6 +225,10 @@ abstract class Model
         static::$_ci->db->limit($perPage, ($page - 1) * $perPage);
     }
 
+    /**
+     * @todo Design the return value.
+     * @return object
+     */
     public static function get()
     {
         return static::$_ci->db->get(static::TABLE_NAME);
