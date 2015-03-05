@@ -7,6 +7,8 @@
  */
 namespace Dy\Orm;
 
+use Dy\Db\Exception\DbException;
+use Dy\Orm\Exception\NotDeleted;
 use Dy\Orm\Exception\NotFound;
 use Dy\Orm\Exception\NotModified;
 use Dy\Orm\Exception\NotSaved;
@@ -298,6 +300,71 @@ abstract class Model
         }
 
         return new static($record);
+    }
+
+    /**
+     * Delete a row or rows by primary key(s)
+     *
+     * @param array|int   $primary_key_values
+     * @return int|false  Count of deleted rows. If the query failed, FALSE will be returned.
+     * @throws DbException
+     */
+    public static function destroy($primary_key_values)
+    {
+        if (!static::$_booted) {
+            static::_boot();
+        }
+
+        // Use destroy_or_fail actually
+        try {
+            return static::destroy_or_fail($primary_key_values);
+        } catch (DbException $e) {
+            throw $e;
+        } catch (\Exception $e) {
+            return FALSE;
+        }
+    }
+
+    /**
+     * Delete a row or rows by primary key(s) and throw an exception if query fails.
+     *
+     * @param array|int   $primary_key_values
+     * @return int        Count of deleted rows.
+     * @throws \InvalidArgumentException
+     * @throws NotDeleted If the deletion fails.
+     */
+    public static function destroy_or_fail($primary_key_values)
+    {
+        if (!static::$_booted) {
+            static::_boot();
+        }
+        $primary_key_values = is_array($primary_key_values) ? $primary_key_values : func_get_args();
+
+        // Empty array is not allowed in case the whole table is emptied.
+        if (empty($primary_key_values)) {
+            throw new \InvalidArgumentException('No primary keys are set for deleting');
+        }
+
+        // We'll actually add where conditions and move the real delete work to another method.
+        static::$_ci->db->where_in(static::PRIMARY_KEY_NAME, $primary_key_values);
+        $count = static::_real_destroy();
+
+        // Throws exception if no rows are affected
+        if ($count == 0) {
+            throw new NotDeleted($primary_key_values);
+        }
+        return $count;
+    }
+
+    /**
+     * Internal method for deleting rows.
+     *
+     * @return int Count of deleted rows.
+     */
+    private static function _real_destroy()
+    {
+        static::$_ci->db->delete(static::TABLE_NAME);
+        return static::$_ci->db->affected_rows();
     }
 
     /**
