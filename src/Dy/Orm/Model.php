@@ -103,12 +103,18 @@ abstract class Model
         return $selectFiltered;
     }
 
+    /**
+     * @todo Return something for the chain method.
+     * @param string $order
+     * @return array [[field, direction], ...]
+     */
     public static function order($order)
     {
         $order = static::_filter_order($order);
         foreach ($order as $val) {
             static::$_ci->db->order_by($val[0], $val[1]);
         }
+        return $order;
     }
 
     private static function _filter_order($order)
@@ -121,19 +127,20 @@ abstract class Model
             while ($offset < $len) {
                 $offset += 1;
                 $pos = static::_strpos_or($src, array('+', '-', ',', ' '), $offset);
-                $name = trim(substr($src, $offset, $pos - $offset));
-                if ($name !== '') {
-                    $direction = substr($src, $offset - 1, 1);
-                    if ($direction === '+') {
-                        $direction = 'ASC';
-                    } elseif ($direction === '-') {
-                        $direction = 'DESC';
-                    } else {
-                        if ($offset === 1) {
-                            $name = ltrim($direction . $name);
-                        }
-                        $direction = 'ASC';
+                $name = substr($src, $offset, $pos - $offset);
+                $direction = substr($src, $offset - 1, 1);
+                if ($direction === '+') {
+                    $direction = 'ASC';
+                } elseif ($direction === '-') {
+                    $direction = 'DESC';
+                } else {
+                    if ($offset === 1) {
+                        $name = $direction . $name;
                     }
+                    $direction = 'ASC';
+                }
+                $name = trim($name);
+                if ($name !== '') {
                     static::_check_field($name);
                     $order[] = array($name, $direction);
                 }
