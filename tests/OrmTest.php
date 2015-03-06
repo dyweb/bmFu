@@ -39,6 +39,12 @@ class OrmTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('hangout', $t->name);
     }
 
+    public function testCount()
+    {
+        $count = Topic::countAll();
+        $this->assertTrue($count >= 2);
+    }
+
     public function testSaveEmptyFail()
     {
         $t = new Topic();
@@ -71,11 +77,10 @@ class OrmTest extends PHPUnit_Framework_TestCase
 
     public function testSaveId()
     {
-        $count = Topic::countAll();
         $t = new Topic();
         $t->name = 'xiaoming';
         $t->save();
-        $this->assertEquals($count + 1, $t->id);
+        $this->assertTrue($t->id > 0);
     }
 
     public function testSaveNotModifiedFail()
@@ -94,6 +99,142 @@ class OrmTest extends PHPUnit_Framework_TestCase
         $t->name = 'callmemaybe' . time();
         $t->save();
         $this->assertEquals(3, $t->id);
+    }
+
+    public function testDelete()
+    {
+        $t = new Topic();
+        $t->name = 'hello_delete';
+        $t->save();
+        $this->assertTrue($t->delete());
+        $this->assertNotTrue($t->exists());
+    }
+
+    public function testDeleteEmpty()
+    {
+        $t = new Topic();
+        $this->assertNotTrue($t->delete());
+        $this->assertNotTrue($t->exists());
+    }
+
+    public function testDeleteOrFail()
+    {
+        $t = new Topic();
+        $t->name = 'hello_delete_or_fail';
+        $t->save();
+        // OK if no exception thrown
+        $this->assertTrue($t->delete_or_fail());
+        $this->assertNotTrue($t->exists());
+    }
+
+    public function testDeleteOrFailEmpty()
+    {
+        $t = new Topic();
+        try {
+            $t->delete();
+        } catch (\Exception $e) {
+            $this->assertInstanceOf('Dy\Orm\Exception\NotExists', $e);
+        }
+    }
+
+    public function testDestroySingle()
+    {
+        $t = new Topic();
+        $t->name = 'hello_destroy';
+        $t->save();
+        $this->assertEquals(1, Topic::destroy($t->id));
+    }
+
+    public function testDestroyNoArg()
+    {
+        $this->assertEquals(false, Topic::destroy(array()));
+    }
+
+    public function testDestroyEmpty()
+    {
+        $this->assertEquals(false, Topic::destroy(0));
+    }
+
+    public function testDestroyMulti()
+    {
+        $t1 = new Topic();
+        $t1->name = 'hello_destroy_multi1';
+        $t1->save();
+        $t2 = new Topic();
+        $t2->name = 'hello_destroy_multi2';
+        $t2->save();
+        $t3 = new Topic();
+        $t3->name = 'hello_destroy_multi3';
+        $t3->save();
+        $this->assertEquals(3, Topic::destroy(array($t1->id, $t2->id, $t3->id)));
+    }
+
+    public function testDestroyMultiArg()
+    {
+        $t1 = new Topic();
+        $t1->name = 'hello_destroy_multi_arg1';
+        $t1->save();
+        $t2 = new Topic();
+        $t2->name = 'hello_destroy_multi_arg2';
+        $t2->save();
+        $t3 = new Topic();
+        $t3->name = 'hello_destroy_multi_arg3';
+        $t3->save();
+        $this->assertEquals(3, Topic::destroy($t1->id, $t2->id, $t3->id));
+    }
+
+    public function testDestroyOrFailSingle()
+    {
+        $t = new Topic();
+        $t->name = 'hello_destroy_or_fail';
+        $t->save();
+        $this->assertEquals(1, Topic::destroy_or_fail($t->id));
+    }
+
+    public function testDestroyOrFailNoArg()
+    {
+        try {
+            Topic::destroy_or_fail(array());
+        } catch (\Exception $e) {
+            $this->assertInstanceOf('\InvalidArgumentException', $e);
+        }
+    }
+
+    public function testDestroyOrFailEmpty()
+    {
+        try {
+            Topic::destroy_or_fail(0);
+        } catch (\Exception $e) {
+            $this->assertInstanceOf('\Dy\Orm\Exception\NotDeleted', $e);
+        }
+    }
+
+    public function testDestroyOrFailMulti()
+    {
+        $t1 = new Topic();
+        $t1->name = 'hello_destroy_or_fail_multi1';
+        $t1->save();
+        $t2 = new Topic();
+        $t2->name = 'hello_destroy_or_fail_multi2';
+        $t2->save();
+        $t3 = new Topic();
+        $t3->name = 'hello_destroy_or_fail_multi3';
+        $t3->save();
+        $this->assertEquals(3, Topic::destroy_or_fail(array($t1->id, $t2->id, $t3->id)));
+    }
+
+    public function testDestroyOrFailMultiArg()
+    {
+        $t1 = new Topic();
+        $t1->name = 'hello_destroy_or_fail_multi_arg1';
+        $t1->save();
+        $t2 = new Topic();
+        $t2->name = 'hello_destroy_or_fail_multi_arg2';
+        $t2->save();
+        $t3 = new Topic();
+        $t3->name = 'hello_destroy_or_fail_multi_arg3';
+        $t3->save();
+        $this->assertEquals(3, Topic::destroy_or_fail($t1->id, $t2->id, $t3->id));
     }
 
     public function testSelect()

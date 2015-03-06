@@ -9,6 +9,7 @@ namespace Dy\Orm;
 
 use Dy\Db\Exception\DbException;
 use Dy\Orm\Exception\NotDeleted;
+use Dy\Orm\Exception\NotExists;
 use Dy\Orm\Exception\NotFound;
 use Dy\Orm\Exception\NotModified;
 use Dy\Orm\Exception\NotSaved;
@@ -314,12 +315,11 @@ abstract class Model
         if (!static::$_booted) {
             static::_boot();
         }
+        $primary_key_values = is_array($primary_key_values) ? $primary_key_values : func_get_args();
 
         // Use destroy_or_fail actually
         try {
             return static::destroy_or_fail($primary_key_values);
-        } catch (DbException $e) {
-            throw $e;
         } catch (\Exception $e) {
             return FALSE;
         }
@@ -361,7 +361,7 @@ abstract class Model
      *
      * @return int Count of deleted rows.
      */
-    private static function _real_destroy()
+    protected static function _real_destroy()
     {
         static::$_ci->db->delete(static::TABLE_NAME);
         return static::$_ci->db->affected_rows();
@@ -375,7 +375,7 @@ abstract class Model
     public function save()
     {
         if (!empty($this->_attributes)) {
-            if (empty($this->_original)) {
+            if (!$this->exists()) {
                 return $this->create();
             } else {
                 return $this->update();
@@ -438,6 +438,72 @@ abstract class Model
         }
 
         return $this->_attributes[static::PRIMARY_KEY_NAME];
+    }
+
+    /**
+     * Delete the current object.
+     *
+     * @todo Update the state of other models if id of another model equals id of mine.
+     * @return bool Whether the process succeeds.
+     */
+    public function delete()
+    {
+        if (!$this->exists()) {
+            return FALSE;
+        }
+
+        try {
+            $this->delete_or_fail();
+        } catch (\Exception $e) {
+            return FALSE;
+        }
+        return TRUE;
+    }
+
+    /**
+     * Delete the current object and throw an exception when it fails.
+     *
+     * @todo Update the state of other models if id of another model equals id of mine.
+     * @throws NotDeleted
+     * @throws NotExists
+     * @return bool Whether the process succeeds.
+     */
+    public function delete_or_fail()
+    {
+        if (!$this->exists()) {
+            throw new NotExists('The current object does\'t exist.');
+        }
+
+        static::$_ci->db->where(static::PRIMARY_KEY_NAME, $this->_attributes[static::PRIMARY_KEY_NAME]);
+        $this->_real_delete();
+        $this->_original = array();
+        return TRUE;
+    }
+
+    /**
+     * The internal method of deleting.
+     *
+     * @throws NotDeleted
+     */
+    protected function _real_delete()
+    {
+        try {
+            static::$_ci->db->delete(static::TABLE_NAME);
+            unset($this->_attributes[static::PRIMARY_KEY_NAME]);
+        } catch (\Exception $e) {
+            throw new NotDeleted(array($this->_attributes[static::PRIMARY_KEY_NAME]));
+        }
+    }
+
+    /**
+     * Find whether the object exists(not deleted).
+     * Note: This method doesn't query the db for a second time.
+     *
+     * @return bool Whether the object exists
+     */
+    public function exists()
+    {
+        return !empty($this->_original);
     }
 
     protected static function _boot()
