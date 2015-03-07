@@ -236,7 +236,12 @@ abstract class Model
 
     public static function paging($page = 1, $perPage = 10)
     {
-        static::$_ci->db->limit($perPage, ($page - 1) * $perPage);
+        static::limit(($page - 1) * $perPage, $perPage);
+    }
+
+    public static function limit($offset, $number)
+    {
+        static::$_ci->db->limit($number, $offset);
     }
 
     public static function countAll()
