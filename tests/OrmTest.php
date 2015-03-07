@@ -281,9 +281,8 @@ class OrmTest extends PHPUnit_Framework_TestCase
 
     public function testWhere()
     {
+        Topic::order('-id+name');
         Topic::where(array(
-            'select' => 'id,name',
-            'order'  => '-id+name',
             'id'     => '<=3'
         ));
         $result = Topic::get()->result();
@@ -293,11 +292,9 @@ class OrmTest extends PHPUnit_Framework_TestCase
 
     public function testPage()
     {
-        Topic::where(array(
-            'order' => '-id',
-            'page'  => '3',
-            'id'    => '<=3'
-        ), array('per_page' => 1));
+        Topic::order('-id');
+        Topic::paging(3, 1);
+        Topic::where('id', '<=3');
         $result = Topic::get()->result();
         $this->assertEquals(1, count($result));
         $this->assertEquals(1, $result[0]->id);

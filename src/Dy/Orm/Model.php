@@ -81,9 +81,13 @@ abstract class Model
         $this->_attributes[$name] = $value;
     }
 
-    public static function select($select)
+    public static function select($select = '*')
     {
-        $select = static::_filter_select($select);
+        if ($select === '*') {
+            $select = static::$_white_list;
+        } else {
+            $select = static::_filter_select($select);
+        }
         if (count($select)) {
             static::$_ci->db->select($select);
         }
@@ -175,63 +179,29 @@ abstract class Model
         return $posMin;
     }
 
-    /**
-     * `where([], [])` will take $whereAs as default, e.g. `where($_GET, ['per_page' => 30])`.
-     * `where(string $key, string $value)` is same as `where([$key => $value])`.
-     * `where([])` is the most common style.
-     *
-     * Support keyword 'select', 'order', 'page' and 'per_page'.
-     * NOTE: MUST have a paging, default is `['page' => 1, 'per_page' => 10]`.
-     *
-     * @param array|string $whereRaw
-     * @param array|mixed $whereAs
-     * @return array ['where' => $where, 'page' => $page, 'per_page' => $perPage]
-     */
     public static function where($whereRaw, $whereAs = NULL)
     {
-        if (!is_null($whereAs)) {
-            if (!is_array($whereRaw)) {
-                $whereRaw = array($whereRaw, $whereAs);
-            } else {
-                $whereRaw = array_merge($whereAs, $whereRaw);
-            }
-        }
-        $page = 1;
-        $perPage = 10;
+        static::$_ci->db->where(static::_filter_where(is_array($whereRaw) ? $whereRaw : array($whereRaw => $whereAs)));
+    }
+
+    private static function _filter_where($whereRaw)
+    {
         $where = array();
         foreach ($whereRaw as $key => $value) {
-            if ($key === 'select') {
-                static::select($value);
-            } elseif ($key === 'order') {
-                static::order($value);
-            } elseif ($key === 'page') {
-                $page = max(1, intval($value));
-            } elseif ($key === 'per_page') {
-                $perPage = max(1, intval($value));
-            } else {
-                static::_check_field($key);
-                switch (substr($value, 0, 2)) {
-                    case '>=':          $key .= '>=';   $value = substr($value, 2); break;
-                    case '<=':          $key .= '<=';   $value = substr($value, 2); break;
-                    default:
-                        switch (substr($value, 0, 1)) {
-                            case '!':   $key .= '!=';   $value = substr($value, 1); break;
-                            case '>':   $key .= '>';    $value = substr($value, 1); break;
-                            case '<':   $key .= '<';    $value = substr($value, 1);
-                        }
-                }
-                $where[$key] = $value;
+            static::_check_field($key);
+            switch (substr($value, 0, 2)) {
+                case '>=':          $key .= '>=';   $value = substr($value, 2); break;
+                case '<=':          $key .= '<=';   $value = substr($value, 2); break;
+                default:
+                    switch (substr($value, 0, 1)) {
+                        case '!':   $key .= '!=';   $value = substr($value, 1); break;
+                        case '>':   $key .= '>';    $value = substr($value, 1); break;
+                        case '<':   $key .= '<';    $value = substr($value, 1);
+                    }
             }
+            $where[$key] = $value;
         }
-        if ($page >= 1) {
-            static::paging($page, $perPage);
-        }
-        static::$_ci->db->where($where);
-        return array(
-            'where'     => $where,
-            'page'      => $page,
-            'per_page'  => $perPage
-        );
+        return $where;
     }
 
     public static function paging($page = 1, $perPage = 10)
@@ -259,27 +229,51 @@ abstract class Model
     }
 
     /**
-     * @see \Dy\Orm\Model::where
      * @param $whereRaw
-     * @param $whereAs
+     * @param $default
      * @return array [
      *     'count' => $count,
      *     'result' => [$item0, $item1, ...],
      *     'option' => ['page' => $page, 'per_page' => $perPage]
      * ]
      */
-    public static function getWhere($whereRaw, $whereAs)
+    public static function getWhere($whereRaw, $default = array())
     {
-        $condition = static::where($whereRaw, $whereAs);
+        $whereRaw = array_merge(array_merge(array(
+            'select' => '*',
+            'order' => '',
+            'page' => 1,
+            'per_page' => 10
+        ), $default), $whereRaw);
+
+        static::select($whereRaw['select']);
+        if ($whereRaw['order']) {
+            static::order($whereRaw['order']);
+        }
+        static::paging(
+            $page = max(1, intval($whereRaw['page'])),
+            $perPage = min(50, max(1, intval($whereRaw['per_page'])))
+        );
+
+        unset($whereRaw['select']);
+        unset($whereRaw['order']);
+        unset($whereRaw['page']);
+        unset($whereRaw['per_page']);
+
+        $where = static::_filter_where($whereRaw);
+
+        static::$_ci->db->where($where);
         $result = static::get()->result();
-        static::$_ci->db->where($condition['where']);
+
+        static::$_ci->db->where($where);
         $count = static::countAll();
+
         return array(
             'count'  => $count,
             'result' => $result,
             'option' => array(
-                'page'     => $condition['page'],
-                'per_page' => $condition['per_page']
+                'page'     => $page,
+                'per_page' => $perPage
             )
         );
     }
