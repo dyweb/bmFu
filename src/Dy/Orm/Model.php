@@ -113,7 +113,6 @@ abstract class Model
     /**
      * @todo Return something for the chain method.
      * @param string $order
-     * @return array [[field, direction], ...]
      */
     public static function order($order)
     {
@@ -121,7 +120,6 @@ abstract class Model
         foreach ($order as $val) {
             static::$_ci->db->order_by($val[0], $val[1]);
         }
-        return $order;
     }
 
     private static function _filter_order($order)

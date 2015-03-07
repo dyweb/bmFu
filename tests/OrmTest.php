@@ -254,31 +254,6 @@ class OrmTest extends PHPUnit_Framework_TestCase
         }
     }
 
-    /**
-     * Add try-finally to prevent `order` from effecting other functions.
-     * @todo Redesign this test after changing the return of Model::order.
-     */
-    public function testOrder()
-    {
-        try {
-            $order = Topic::order('-id-name+create_time');
-            $this->assertEquals('DESC', $order[0][1]);
-            $this->assertEquals('DESC', $order[1][1]);
-            $this->assertEquals('ASC',  $order[2][1]);
-        } finally {
-            Topic::get();
-        }
-
-        try {
-            $order = Topic::order('id, +name, -create_time');
-            $this->assertEquals('ASC',  $order[0][1]);
-            $this->assertEquals('ASC',  $order[1][1]);
-            $this->assertEquals('DESC', $order[2][1]);
-        } finally {
-            Topic::get();
-        }
-    }
-
     public function testWhere()
     {
         Topic::order('-id+name');
