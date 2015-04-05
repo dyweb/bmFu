@@ -334,6 +334,10 @@ abstract class Model
      */
     public static function destroyWhere($whereRaw, $limit = 1)
     {
+        if (!static::$_booted) {
+            static::_boot();
+        }
+
         // Check arguments for security
         if (empty($whereRaw)) {
             throw new \InvalidArgumentException('Empty where statement is not allowed');

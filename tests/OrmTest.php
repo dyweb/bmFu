@@ -160,14 +160,15 @@ class OrmTest extends PHPUnit_Framework_TestCase
         $t1 = new Topic();
         $t1->name = 'hello_destroy_where_1';
         $t1->save();
+        $start_id = $t1->id;
         $t2 = new Topic();
         $t2->name = 'hello_destroy_where_2';
         $t2->save();
         $t3 = new Topic();
         $t3->name = 'hello_destroy_where_3';
         $t3->save();
-        $this->assertEquals(1, Topic::destroyWhere(array('name LIKE \'hello_destroy_where_%\'')));
-        $this->assertEquals(2, Topic::destroyWhere(array('name LIKE \'hello_destroy_where_%\''), 3));
+        $this->assertEquals(1, Topic::destroyWhere(array('id' => ">= $start_id")));
+        $this->assertEquals(2, Topic::destroyWhere(array('id' => ">= $start_id"), 3));
     }
 
     public function testDestroyWhereIllegalArg()
@@ -179,7 +180,7 @@ class OrmTest extends PHPUnit_Framework_TestCase
         }
 
         try {
-            Topic::destroyWhere(array('name IS NULL'), 0);
+            Topic::destroyWhere(array('id' => '> 0'), 0);
         } catch (\Exception $e) {
             $this->assertInstanceOf('\InvalidArgumentException', $e);
         }
