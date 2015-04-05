@@ -482,6 +482,7 @@ abstract class Model
         if ($affected_rows !== 1) {
             throw new NotSaved();
         }
+        $this->_original = $this->_attributes;
 
         return $this->_attributes[static::PRIMARY_KEY_NAME];
     }
@@ -539,7 +540,6 @@ abstract class Model
 
         static::$_ci->db->where(static::PRIMARY_KEY_NAME, $this->_attributes[static::PRIMARY_KEY_NAME]);
         $this->_real_delete();
-        $this->_original = array();
         return TRUE;
     }
 
@@ -552,6 +552,7 @@ abstract class Model
     {
         try {
             static::$_ci->db->delete(static::TABLE_NAME);
+            $this->_original = array();
             unset($this->_attributes[static::PRIMARY_KEY_NAME]);
         } catch (\Exception $e) {
             throw new NotDeleted(array($this->_attributes[static::PRIMARY_KEY_NAME]));

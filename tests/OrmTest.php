@@ -26,9 +26,9 @@ class OrmTest extends PHPUnit_Framework_TestCase
     public function testNotFound()
     {
         try {
-            $t = Topic::find(233);
+            $t = Topic::find(2333);
         } catch (\Dy\Orm\Exception\NotFound $e) {
-            $this->assertEquals($e->get_primary_key_value(), 233);
+            $this->assertEquals($e->get_primary_key_value(), 2333);
         }
     }
 
