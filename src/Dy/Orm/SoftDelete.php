@@ -64,6 +64,9 @@ trait SoftDelete
      */
     public static function onlyTrashed()
     {
+        if (!static::$_booted) {
+            static::_boot();
+        }
         static::$_use_soft_delete = false;
         static::$_ci->db->where(static::$_soft_delete_column, static::$_soft_delete_values[true]);
     }
@@ -146,10 +149,11 @@ trait SoftDelete
             static::$_forced_delete = false;
             static::$_ci->db->delete(static::TABLE_NAME);
         } else {
-            static::$_ci->db->update(static::TABLE_NAME, array(
-                static::$_soft_delete_column => static::$_soft_delete_values[true],
-                'update_time' => date("Y-m-d H:i:s")
-            ));
+            $update_data[static::$_soft_delete_column] = static::$_soft_delete_values[true];
+            if (static::$timestamps) {
+                $update_data['update_time'] = date("Y-m-d H:i:s");
+            }
+            static::$_ci->db->update(static::TABLE_NAME, $update_data);
         }
         return static::$_ci->db->affected_rows();
     }

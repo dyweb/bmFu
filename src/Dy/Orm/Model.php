@@ -33,11 +33,21 @@ abstract class Model
     protected static $_redis;
     protected static $_white_list = array();
 
+    /**
+     * Whether to use timestamp
+     * @var bool
+     */
+    public static $timestamps = true;
+
     protected $_attributes = array();
     protected $_original = array();
 
     public function __construct($attributes = array())
     {
+        if (!static::$_booted) {
+            static::_boot();
+        }
+
         if (empty(static::TABLE_NAME)) {
             $class_name = get_called_class();
             throw new \Exception('Model ' . $class_name . ' must have table name');
@@ -83,6 +93,9 @@ abstract class Model
 
     public static function select($select = '*')
     {
+        if (!static::$_booted) {
+            static::_boot();
+        }
         if ($select === '*') {
             $select = static::$_white_list;
         } else {
@@ -116,6 +129,9 @@ abstract class Model
      */
     public static function order($order)
     {
+        if (!static::$_booted) {
+            static::_boot();
+        }
         $order = static::_filter_order($order);
         foreach ($order as $val) {
             static::$_ci->db->order_by($val[0], $val[1]);
@@ -179,6 +195,9 @@ abstract class Model
 
     public static function where($whereRaw, $whereAs = NULL)
     {
+        if (!static::$_booted) {
+            static::_boot();
+        }
         static::$_ci->db->where(static::_filter_where(is_array($whereRaw) ? $whereRaw : array($whereRaw => $whereAs)));
     }
 
@@ -204,16 +223,25 @@ abstract class Model
 
     public static function paging($page = 1, $perPage = 10)
     {
+        if (!static::$_booted) {
+            static::_boot();
+        }
         static::limit(($page - 1) * $perPage, $perPage);
     }
 
     public static function limit($offset, $number)
     {
+        if (!static::$_booted) {
+            static::_boot();
+        }
         static::$_ci->db->limit($number, $offset);
     }
 
     public static function countAll()
     {
+        if (!static::$_booted) {
+            static::_boot();
+        }
         static::$_ci->db->select('count(*) as num');
         return static::get()->row()->num;
     }
@@ -224,6 +252,9 @@ abstract class Model
      */
     public static function get()
     {
+        if (!static::$_booted) {
+            static::_boot();
+        }
         return static::_real_get();
     }
 
@@ -238,6 +269,10 @@ abstract class Model
      */
     public static function getWhere($whereRaw, $default = array())
     {
+        if (!static::$_booted) {
+            static::_boot();
+        }
+
         $whereRaw = array_merge(array_merge(array(
             'select' => '*',
             'order' => '',
@@ -432,7 +467,7 @@ abstract class Model
     public function create()
     {
         // add the timestamps
-        if (!isset($this->_attributes['update_time'])) {
+        if (static::$timestamps AND !isset($this->_attributes['update_time'])) {
             $current_time = date("Y-m-d H:i:s");
             $this->_attributes['create_time'] = $current_time;
             $this->_attributes['update_time'] = $current_time;
@@ -474,7 +509,9 @@ abstract class Model
             throw new NotModified();
         }
 
-        $this->_attributes['update_time'] = date("Y-m-d H:i:s");
+        if (static::$timestamps) {
+            $this->_attributes['update_time'] = date("Y-m-d H:i:s");
+        }
         $this->_real_update($dirty);
 
         // check if really saved. in production and dev environment ci's database doesn't throw error.
