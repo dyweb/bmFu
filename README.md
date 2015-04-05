@@ -10,8 +10,8 @@ A php data wrapper for restful backend service
 - [x] __get
 - [x] create (will throw Exception)
 - [x] update (will throw Exception)
-- [ ] delete (soft delete use trait)
-- [ ] delete_or_fail
+- [x] delete (soft delete use trait)
+- [x] delete_or_fail
 - [ ] remember_to_mem
 - [ ] remember_to_cache
 
