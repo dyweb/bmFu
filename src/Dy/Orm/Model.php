@@ -214,7 +214,8 @@ abstract class Model
 
     public static function countAll()
     {
-        return static::$_ci->db->select('count(*) as num')->get(static::TABLE_NAME)->row()->num;
+        static::$_ci->db->select('count(*) as num');
+        return static::get()->row()->num;
     }
 
     /**
@@ -223,7 +224,7 @@ abstract class Model
      */
     public static function get()
     {
-        return static::$_ci->db->get(static::TABLE_NAME);
+        return static::_real_get();
     }
 
     /**
@@ -277,7 +278,17 @@ abstract class Model
     }
 
     /**
-     * Find one record by primary_key_value
+     * Perform the real getting.
+     *
+     * @return object result object
+     */
+    protected static function _real_get()
+    {
+        return static::$_ci->db->get(static::TABLE_NAME);
+    }
+
+    /**
+     * Find one record by primary_key_value.
      *
      * @param $primary_key_value
      * @return static
@@ -290,9 +301,8 @@ abstract class Model
         }
         static::$_ci->db->where(static::PRIMARY_KEY_NAME, $primary_key_value);
         // we must add limit 1 to avoid ci to get more result
-        $record = static::$_ci->db->limit(1)
-            ->get(static::TABLE_NAME)
-            ->row_array();
+        static::$_ci->db->limit(1);
+        $record = static::get()->row_array();
         if (empty($record)) {
             throw new NotFound($primary_key_value);
         }
@@ -401,7 +411,8 @@ abstract class Model
     }
 
     /**
-     * @return int primary_key_value for the created or updated record
+     * @return int primary_key_value for the created or updated record.
+     *
      * @throws NotModified
      * @throws NotSaved
      */
@@ -427,12 +438,7 @@ abstract class Model
             $this->_attributes['update_time'] = $current_time;
         }
 
-        try {
-            static::$_ci->db->insert(static::TABLE_NAME, $this->_attributes);
-        } catch (\Exception $e) {
-            throw new NotSaved($e->getMessage());
-        }
-
+        $this->_real_insert();
         $id = intval(static::$_ci->db->insert_id());
 
         // in production, ci's database wont have exception so we check the id.
@@ -447,6 +453,20 @@ abstract class Model
         return $id;
     }
 
+    /**
+     * Perform the real insertion.
+     *
+     * @throws NotSaved
+     */
+    protected function _real_insert()
+    {
+        try {
+            static::$_ci->db->insert(static::TABLE_NAME, $this->_attributes);
+        } catch (\Exception $e) {
+            throw new NotSaved($e->getMessage());
+        }
+    }
+
     public function update()
     {
         $dirty = $this->_get_dirty();
@@ -455,14 +475,7 @@ abstract class Model
         }
 
         $this->_attributes['update_time'] = date("Y-m-d H:i:s");
-
-        try {
-            static::$_ci->db->update(static::TABLE_NAME,
-                $dirty,
-                array(static::PRIMARY_KEY_NAME => $this->_attributes[static::PRIMARY_KEY_NAME]));
-        } catch (\Exception $e) {
-            throw new NotSaved($e->getMessage());
-        }
+        $this->_real_update($dirty);
 
         // check if really saved. in production and dev environment ci's database doesn't throw error.
         $affected_rows = static::$_ci->db->affected_rows();
@@ -471,6 +484,23 @@ abstract class Model
         }
 
         return $this->_attributes[static::PRIMARY_KEY_NAME];
+    }
+
+    /**
+     * Perform the real update.
+     *
+     * @param array $dirty Associative array of values to be updated.
+     * @throws NotSaved
+     */
+    protected function _real_update($dirty)
+    {
+        try {
+            static::$_ci->db->update(static::TABLE_NAME,
+                $dirty,
+                array(static::PRIMARY_KEY_NAME => $this->_attributes[static::PRIMARY_KEY_NAME]));
+        } catch (\Exception $e) {
+            throw new NotSaved($e->getMessage());
+        }
     }
 
     /**
@@ -514,7 +544,7 @@ abstract class Model
     }
 
     /**
-     * The internal method of deleting.
+     * Perform the real deletion.
      *
      * @throws NotDeleted
      */
