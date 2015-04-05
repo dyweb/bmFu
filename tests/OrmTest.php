@@ -123,7 +123,7 @@ class OrmTest extends PHPUnit_Framework_TestCase
         $t->name = 'hello_delete_or_fail';
         $t->save();
         // OK if no exception thrown
-        $this->assertTrue($t->delete_or_fail());
+        $this->assertTrue($t->deleteOrFail());
         $this->assertNotTrue($t->exists());
     }
 
@@ -153,6 +153,36 @@ class OrmTest extends PHPUnit_Framework_TestCase
     public function testDestroyEmpty()
     {
         $this->assertEquals(false, Topic::destroy(0));
+    }
+
+    public function testDestroyWhere()
+    {
+        $t1 = new Topic();
+        $t1->name = 'hello_destroy_where_1';
+        $t1->save();
+        $t2 = new Topic();
+        $t2->name = 'hello_destroy_where_2';
+        $t2->save();
+        $t3 = new Topic();
+        $t3->name = 'hello_destroy_where_3';
+        $t3->save();
+        $this->assertEquals(1, Topic::destroyWhere(array('name LIKE \'hello_destroy_where_%\'')));
+        $this->assertEquals(2, Topic::destroyWhere(array('name LIKE \'hello_destroy_where_%\''), 3));
+    }
+
+    public function testDestroyWhereIllegalArg()
+    {
+        try {
+            Topic::destroyWhere(array());
+        } catch (\Exception $e) {
+            $this->assertInstanceOf('\InvalidArgumentException', $e);
+        }
+
+        try {
+            Topic::destroyWhere(array('name IS NULL'), 0);
+        } catch (\Exception $e) {
+            $this->assertInstanceOf('\InvalidArgumentException', $e);
+        }
     }
 
     public function testDestroyMulti()
@@ -188,13 +218,13 @@ class OrmTest extends PHPUnit_Framework_TestCase
         $t = new Topic();
         $t->name = 'hello_destroy_or_fail';
         $t->save();
-        $this->assertEquals(1, Topic::destroy_or_fail($t->id));
+        $this->assertEquals(1, Topic::destroyOrFail($t->id));
     }
 
     public function testDestroyOrFailNoArg()
     {
         try {
-            Topic::destroy_or_fail(array());
+            Topic::destroyOrFail(array());
         } catch (\Exception $e) {
             $this->assertInstanceOf('\InvalidArgumentException', $e);
         }
@@ -203,7 +233,7 @@ class OrmTest extends PHPUnit_Framework_TestCase
     public function testDestroyOrFailEmpty()
     {
         try {
-            Topic::destroy_or_fail(0);
+            Topic::destroyOrFail(0);
         } catch (\Exception $e) {
             $this->assertInstanceOf('\Dy\Orm\Exception\NotDeleted', $e);
         }
@@ -220,7 +250,7 @@ class OrmTest extends PHPUnit_Framework_TestCase
         $t3 = new Topic();
         $t3->name = 'hello_destroy_or_fail_multi3';
         $t3->save();
-        $this->assertEquals(3, Topic::destroy_or_fail(array($t1->id, $t2->id, $t3->id)));
+        $this->assertEquals(3, Topic::destroyOrFail(array($t1->id, $t2->id, $t3->id)));
     }
 
     public function testDestroyOrFailMultiArg()
@@ -234,7 +264,7 @@ class OrmTest extends PHPUnit_Framework_TestCase
         $t3 = new Topic();
         $t3->name = 'hello_destroy_or_fail_multi_arg3';
         $t3->save();
-        $this->assertEquals(3, Topic::destroy_or_fail($t1->id, $t2->id, $t3->id));
+        $this->assertEquals(3, Topic::destroyOrFail($t1->id, $t2->id, $t3->id));
     }
 
     public function testSelect()

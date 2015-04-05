@@ -316,10 +316,42 @@ abstract class Model
 
         // Use destroy_or_fail actually
         try {
-            return static::destroy_or_fail($primary_key_values);
+            return static::destroyOrFail($primary_key_values);
         } catch (\Exception $e) {
             return FALSE;
         }
+    }
+
+    /**
+     * Delete certain rows according to where clauses and number limitation.
+     *
+     * @param array|string  $whereRaw where clause; note an empty argument is not allowed
+     * @param int           $limit the maximum number of rows to be deleted, positive numbers only
+     * @return int          Count of deleted rows.
+     * @throws \InvalidArgumentException
+     * @throws DbException
+     * @throws NotDeleted If the deletion fails.
+     */
+    public static function destroyWhere($whereRaw, $limit = 1)
+    {
+        // Check arguments for security
+        if (empty($whereRaw)) {
+            throw new \InvalidArgumentException('Empty where statement is not allowed');
+        }
+        if ($limit <= 0) {
+            throw new \InvalidArgumentException('Limit has to be set when destroying');
+        }
+
+        // Execute the query
+        self::where($whereRaw);
+        self::limit(0, $limit);
+        $count = static::_real_destroy();
+
+        // Throws exception if no rows are affected
+        if ($count == 0) {
+            throw new NotDeleted($whereRaw);
+        }
+        return $count;
     }
 
     /**
@@ -330,7 +362,7 @@ abstract class Model
      * @throws \InvalidArgumentException
      * @throws NotDeleted If the deletion fails.
      */
-    public static function destroy_or_fail($primary_key_values)
+    public static function destroyOrFail($primary_key_values)
     {
         if (!static::$_booted) {
             static::_boot();
@@ -450,7 +482,7 @@ abstract class Model
         }
 
         try {
-            $this->delete_or_fail();
+            $this->deleteOrFail();
         } catch (\Exception $e) {
             return FALSE;
         }
@@ -465,7 +497,7 @@ abstract class Model
      * @throws NotExists
      * @return bool Whether the process succeeds.
      */
-    public function delete_or_fail()
+    public function deleteOrFail()
     {
         if (!$this->exists()) {
             throw new NotExists('The current object does\'t exist.');
