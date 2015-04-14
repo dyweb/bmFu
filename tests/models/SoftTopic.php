@@ -18,7 +18,6 @@
  */
 final class SoftTopic extends Dy\Orm\Model
 {
-    use Dy\Orm\Page;
     use Dy\Orm\SoftDelete;
     const TABLE_NAME = 'topics';
 
