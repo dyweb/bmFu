@@ -1,4 +1,4 @@
-# Style guide for bmfu
+# Style Guide for bmfu
 
 1. we use psr-4 autoload
 2. use snake_case for variable and function names.
